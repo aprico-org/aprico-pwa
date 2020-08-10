@@ -1,0 +1,40 @@
+{
+  "name": "aprico-pwa",
+  "description": "Progressive Web App wrapper for aprico password manager.",
+  "version": "0.1.0",
+  "main": "src/js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "copy-assets node_modules/aprico-ui/dist/css/ extension/dist/css/ && genversion src/js/version.js && npm run build-js",
+    "build-js": "browserify -i buffer src/js/main.js | uglifyjs -cm > dist/js/bundle.js",
+    "watch-js": "watchify -i buffer src/js/main.js -o dist/js/bundle.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprico-org/aprico-pwa.git"
+  },
+  "keywords": [
+    "javascript",
+    "pwa",
+    "aprico",
+    "password-manager",
+    "password-generator"
+  ],
+  "author": "Pino Ceniccola",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/aprico-org/aprico-pwa/issues"
+  },
+  "homepage": "https://github.com/aprico-org/aprico-pwa",
+  "dependencies": {
+    "aprico-ui": "^0.2.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "copy-assets": "^1.0.2",
+    "genversion": "^2.2.1",
+    "uglify-es": "^3.3.9",
+    "watchify": "^3.11.0",
+    "web-ext": "^5.0.0"
+  }
+}
