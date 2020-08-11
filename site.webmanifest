@@ -12,5 +12,12 @@
     "background_color": "#ffffff",
     "start_url": "https://aprico.com/?pwa",
     "display": "standalone",
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "share_target": {
+      "action": "/",
+      "method": "GET",
+      "params": {
+        "url": "service"
+      }
+    }
 }
