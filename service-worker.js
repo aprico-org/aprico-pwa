@@ -1,70 +1,92 @@
-var CACHE = 'v0.1.0beta3';
+var CACHE = 'v0.1.0b18';
 
 // On install, cache some resources.
 self.addEventListener('install', function(evt) {
-  console.log('The service worker is being installed.');
+		// [debug] console.log('[SW]: The service worker is being installed. Version ' + CACHE);
 
-  // Ask the service worker to keep installing until the returning promise
-  // resolves.
-  evt.waitUntil(precache());
+		// install next version
+		self.skipWaiting();
+
+		// Ask the service worker to keep installing until the returning promise
+		// resolves.
+		evt.waitUntil(precache());
 });
 
-// On fetch, use cache only strategy.
+// On fetch, use cache first strategy.
 self.addEventListener('fetch', function(evt) {
-  //console.log('The service worker is serving the asset.');
-  evt.respondWith(fromCache(evt.request));
+		evt.respondWith(fromCache(evt.request));
 });
 
 // Open a cache and use `addAll()` with an array of assets to add all of them
 // to the cache. Return a promise resolving when all the assets are added.
+// Adding versioning to URLS. Omg, caching is hard...
 function precache() {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.addAll([
-      './',
-      './dist/css/index.css',
-      './dist/js/bundle.js',
-      './site.webmanifest'
-    ]);
-  });
+		return caches.open(CACHE).then(function(cache) {
+				return cache.addAll([
+						'/?' + CACHE,
+						'/dist/css/index.css?' + CACHE,
+						'/dist/js/bundle.js?' + CACHE,
+						'/site.webmanifest?' + CACHE,
+						'/favicon.ico?' + CACHE
+				]);
+		});
 }
 
 // Open the cache where the assets were stored and search for the requested
 // resource. Notice that in case of no matching, the promise still resolves
 // but it does with `undefined` as value.
 function fromCache(request) {
-  return caches.open(CACHE).then(function (cache) {
-    return cache.match(request,{'ignoreSearch':true}).then(function (response) {
-      
-      //return matching || Promise.reject('no-match');
-    if (response !== undefined) {
-      console.log('response from cache',response);
-      return response;
-    } else {
-      return fetch(request).then(function (response) {
-        // response may be used only once
-        // we need to save clone to put one copy in cache
-        // and serve second one
-        let responseClone = response.clone();
-        console.log('response from network',responseClone);
+		// [debug] console.log('[SW]: Handling request for: ', request.url, request);
+		return caches.open(CACHE).then(function(cache) {
+				// The `ignoreSearch` means that query params will be ignored
+				// Yes, naming is hard too!
+				return cache.match(request, { 'ignoreSearch': true }).then(function(response) {
 
-        caches.open(CACHE).then(function (cache) {
-          cache.put(request, responseClone);
-        });
-        return response;
-      })
-    }
-    });
-  });
+						if (response !== undefined) {
+								// [debug] console.log('[SW]: Response from cache for: ', response.url, response);
+								return response;
+						} else {
+
+								return fetch(request).then(function(response) {
+										// response may be used only once
+										// we need to save clone to put one copy in cache
+										// and serve second one
+										let responseClone = response.clone();
+										// [debug] console.log('[SW]: Response from network for ', responseClone.url, responseClone);
+
+										caches.open(CACHE).then(function(cache) {
+												cache.put(request, responseClone);
+										});
+										return response;
+								})
+						}
+				});
+		}).catch((async (error) => {
+
+				console.log('[SW]: Error in fetch. ', error);
+
+				if (request.destination == 'document') {
+						// [debug] console.log('[SW]: Requesting document, serve the application as a fallback');
+						const cache = await caches.open(CACHE);
+						const cachedResponse = await cache.match('/', { 'ignoreSearch': true });
+						return cachedResponse;
+				}
+		}));
 }
 
-// Update consists in opening the cache, performing a network request and
-// storing the new response data.
-function update(request) {
-  //return caches.open(CACHE).then(function (cache) {
-    return fetch(request).then(function (response) {
-      return cache.put(request, response.clone()).then(function () {
-        return response;
-      });
-    });
-  //});
-}
+
+// delete old cache keys
+self.addEventListener('activate', (event) => {
+		var cacheKeeplist = CACHE;
+
+		event.waitUntil(
+				caches.keys().then((keyList) => {
+						return Promise.all(keyList.map((key) => {
+								if (cacheKeeplist.indexOf(key) === -1) {
+										// [debug] console.log('[SW]: Deleting old cache key: ' + key);
+										return caches.delete(key);
+								}
+						}));
+				})
+		);
+});
