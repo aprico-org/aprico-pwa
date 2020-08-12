@@ -1,23 +1,24 @@
 {
-    "name": "aprico",
-    "short_name": "aprico",
-    "icons": [
-        {
-            "src": "/android-chrome-96x96.png",
-            "sizes": "96x96",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "start_url": "https://aprico.com/?pwa",
-    "display": "standalone",
-    "orientation": "portrait",
-    "share_target": {
-      "action": "/",
-      "method": "GET",
-      "params": {
-        "url": "service"
-      }
-    }
+	"name": "aprico",
+	"short_name": "aprico",
+	"icons": [
+		{
+			"src": "/android-chrome-96x96.png",
+			"sizes": "96x96",
+			"type": "image/png"
+		}
+	],
+	"theme_color": "#ffffff",
+	"background_color": "#ffffff",
+	"start_url": "/?pwa",
+	"display": "standalone",
+	"orientation": "portrait",
+	"share_target": {
+	  "action": "/",
+	  "method": "GET",
+	  "enctype": "application/x-www-form-urlencoded",
+	  "params": {
+		"url": "service"
+	  }
+	}
 }

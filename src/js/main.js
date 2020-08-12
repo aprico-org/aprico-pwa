@@ -58,14 +58,14 @@ if (document.getElementById('aprico-version')) document.getElementById('aprico-v
 // add Service worker/offline support
 
 if ('serviceWorker' in navigator) {
-    //console.log('[SW]: service worker registration in progress.');
-    navigator.serviceWorker.register('service-worker.js').then(function() {
-      //console.log('[SW]: service worker registration complete.');
-      document.getElementById('aprico-version').textContent += ' (offline support)'; 
-    }, function() {
-      console.log('[SW]: service worker registration failure.');
-    });
-  } else {
-    console.log('[SW]: service worker is not supported.');
+	//console.log('[SW]: service worker registration in progress.');
+	navigator.serviceWorker.register('service-worker.js').then(function() {
+		//console.log('[SW]: service worker registration complete.');
+		document.getElementById('aprico-version').textContent += ' (offline support)'; 
+	}, function() {
+		console.log('[SW]: service worker registration failure.');
+	});
+} else {
+	console.log('[SW]: service worker is not supported.');
 }
 
