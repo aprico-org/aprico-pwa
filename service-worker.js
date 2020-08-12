@@ -1,4 +1,4 @@
-var CACHE = 'v0.1.0b24';
+var CACHE = 'v0.1.0b27';
 
 // On install, cache some resources.
 self.addEventListener('install', function(evt) {
