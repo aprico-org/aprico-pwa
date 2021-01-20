@@ -6,11 +6,22 @@
 			"src": "/android-chrome-96x96.png",
 			"sizes": "96x96",
 			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-512x512-maskable.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
 		}
 	],
 	"theme_color": "#ffffff",
 	"background_color": "#ffffff",
-	"start_url": "/?pwa",
+	"start_url": "/",
 	"display": "standalone",
 	"orientation": "portrait",
 	"share_target": {
