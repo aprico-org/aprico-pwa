@@ -8,9 +8,10 @@
 			"type": "image/png"
 		},
 		{
-			"src": "/android-chrome-512x512.png",
+			"src": "/android-chrome-512x512-transparent.png",
 			"sizes": "512x512",
-			"type": "image/png"
+			"type": "image/png",
+			"purpose": "any"
 		},
 		{
 			"src": "/android-chrome-512x512-maskable.png",
@@ -29,7 +30,9 @@
 		"method": "GET",
 		"enctype": "application/x-www-form-urlencoded",
 		"params": {
-		"url": "service"
+			"url": "service",
+			"title": "title",
+			"text": "text"
 		}
 	}
 }
